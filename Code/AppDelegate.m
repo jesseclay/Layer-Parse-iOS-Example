@@ -31,7 +31,6 @@ static NSString *const LayerAppIDString = nil;
 static NSString *const ParseAppIDString = nil;
 static NSString *const ParseClientKeyString = nil;
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -54,7 +53,7 @@ static NSString *const ParseClientKeyString = nil;
     // Initializes a LYRClient object
     NSUUID *appID = [[NSUUID alloc] initWithUUIDString:LayerAppIDString];
     LYRClient *layerClient = [LYRClient clientWithAppID:appID];
-    layerClient.autodownloadMIMETypes = [NSSet setWithObjects:@"image/png",@"image/gif",@"image/jpeg",@"image/jpeg+preview",@"image/gif+preview", nil];
+    layerClient.autodownloadMIMETypes = [NSSet setWithObjects:@"image/png", @"image/gif", @"image/jpeg", @"image/jpeg+preview", @"image/gif+preview", nil];
     // Show View Controller
     ViewController *controller = [ViewController new];
     controller.layerClient = layerClient;
