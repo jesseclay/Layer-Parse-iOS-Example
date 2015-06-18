@@ -53,7 +53,8 @@ static NSString *const ParseClientKeyString = nil;
     // Initializes a LYRClient object
     NSUUID *appID = [[NSUUID alloc] initWithUUIDString:LayerAppIDString];
     LYRClient *layerClient = [LYRClient clientWithAppID:appID];
-    layerClient.autodownloadMIMETypes = [NSSet setWithObjects:@"image/png", @"image/gif", @"image/jpeg", @"image/jpeg+preview", @"image/gif+preview", nil];
+    layerClient.autodownloadMIMETypes = [NSSet setWithObjects:ATLMIMETypeImagePNG, ATLMIMETypeImageJPEG, ATLMIMETypeImageJPEGPreview, ATLMIMETypeImageGIF, ATLMIMETypeImageGIFPreview, ATLMIMETypeLocation, nil];
+    
     // Show View Controller
     ViewController *controller = [ViewController new];
     controller.layerClient = layerClient;
