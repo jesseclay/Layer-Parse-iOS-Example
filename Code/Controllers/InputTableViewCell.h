@@ -1,8 +1,9 @@
 //
-//  ConversationListViewController.h
+//  InputTableViewCell.h
 //  Layer-Parse-iOS-Example
 //
-//  Copyright (c) 2015 Layer. All rights reserved.
+//  Created by Kevin Coleman on 6/10/14.
+//  Copyright (c) 2014 Layer, Inc. All rights reserved.
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -18,17 +19,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <Atlas/Atlas.h>
-#import <ParseUI.h>
-#import "PFUser+ATLParticipant.h"
 
-@interface ConversationListViewController : ATLConversationListViewController
+@interface InputTableViewCell : UITableViewCell
 
-/**
- @abstract Programmatically simulates the selection of an `LYRConversation` object in the conversations table view.
- @discussion This method is used when opening the application in response to a push notification. When invoked, it
- will display the appropriate conversation on screen.
- */
-- (void)selectConversation:(LYRConversation *)conversation;
+@property (nonatomic) UITextField *textField;
+
+- (void)setGuideText:(NSString *)guideText;
+
+- (void)setPlaceHolderText:(NSString *)placeHolderText;
 
 @end

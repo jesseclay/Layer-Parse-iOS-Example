@@ -19,9 +19,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <LayerKit/LayerKit.h>
+#import <SVProgressHUD/SVProgressHUD.h>
+#import "ViewController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+@property (nonatomic) LYRClient *layerClient;
+@property (nonatomic) ViewController *controller;
 
 @end

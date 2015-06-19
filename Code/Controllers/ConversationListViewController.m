@@ -52,10 +52,7 @@
 
 - (void)conversationListViewController:(ATLConversationListViewController *)conversationListViewController didSelectConversation:(LYRConversation *)conversation
 {
-    ConversationViewController *controller = [ConversationViewController conversationViewControllerWithLayerClient:self.layerClient];
-    controller.conversation = conversation;
-    controller.displaysAddressBar = YES;
-    [self.navigationController pushViewController:controller animated:YES];
+    [self presentControllerWithConversation:conversation];
 }
 
 - (void)conversationListViewController:(ATLConversationListViewController *)conversationListViewController didDeleteConversation:(LYRConversation *)conversation deletionMode:(LYRDeletionMode)deletionMode
@@ -78,6 +75,11 @@
             NSLog(@"Error searching for Users by name: %@", error);
         }
     }];
+}
+
+- (id<ATLAvatarItem>)conversationListViewController:(ATLConversationListViewController *)conversationListViewController avatarItemForConversation:(LYRConversation *)conversation
+{
+    return [PFUser new];
 }
 
 #pragma mark - ATLConversationListViewControllerDataSource Methods
@@ -112,12 +114,34 @@
     }
 }
 
+#pragma mark - Conversation Selection From Push Notification
+
+- (void)selectConversation:(LYRConversation *)conversation
+{
+    if (conversation) {
+        [self presentControllerWithConversation:conversation];
+    }
+}
+
+#pragma mark - Conversation Selection
+
+// The following method handles presenting the correct `ATLMConversationViewController`, regardeless of the current state of the navigation stack.
+- (void)presentControllerWithConversation:(LYRConversation *)conversation
+{
+    ConversationViewController *controller = [ConversationViewController conversationViewControllerWithLayerClient:self.layerClient];
+    controller.conversation = conversation;
+    controller.shouldDisplayAvatarItemForOneOtherParticipant = YES;
+    controller.displaysAddressBar = YES;
+    [self.navigationController pushViewController:controller animated:YES];
+}
+
 #pragma mark - Actions
 
 - (void)composeButtonTapped:(id)sender
 {
     ConversationViewController *controller = [ConversationViewController conversationViewControllerWithLayerClient:self.layerClient];
     controller.displaysAddressBar = YES;
+    controller.shouldDisplayAvatarItemForOneOtherParticipant = YES;
     [self.navigationController pushViewController:controller animated:YES];
 }
 

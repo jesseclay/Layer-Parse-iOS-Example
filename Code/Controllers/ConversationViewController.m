@@ -46,7 +46,31 @@
     self.dateFormatter.dateStyle = NSDateFormatterShortStyle;
     self.dateFormatter.timeStyle = NSDateFormatterShortStyle;
 
+    if (self.conversation) {
+        [self addDetailsButton];
+    }
+    
     [self configureUI];
+}
+
+#pragma mark - Details Button Actions
+
+- (void)addDetailsButton
+{
+    if (self.navigationItem.rightBarButtonItem) return;
+    
+    UIBarButtonItem *detailsButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Details"
+                                                                          style:UIBarButtonItemStylePlain
+                                                                         target:self
+                                                                         action:@selector(detailsButtonTapped)];
+    self.navigationItem.rightBarButtonItem = detailsButtonItem;
+}
+
+- (void)detailsButtonTapped
+{
+    ConversationDetailViewController *detailViewController = [ConversationDetailViewController conversationDetailViewControllerWithConversation:self.conversation];
+    detailViewController.layerClient = self.layerClient;
+    [self.navigationController pushViewController:detailViewController animated:YES];
 }
 
 #pragma mark - UI Configuration methods
@@ -124,6 +148,25 @@
         [mergedStatuses appendAttributedString:statusString];
     }];
     return mergedStatuses;
+}
+
+- (NSOrderedSet *)conversationViewController:(ATLConversationViewController *)viewController messagesForMediaAttachments:(NSArray *)mediaAttachments
+{
+    // Configure the push message
+    NSMutableOrderedSet *messages = [NSMutableOrderedSet new];
+    for (ATLMediaAttachment *attachment in mediaAttachments){
+        NSArray *messageParts = ATLMessagePartsWithMediaAttachment(attachment);
+        NSString *pushText = @"sent you a message!";
+
+        NSDictionary *pushOptions = @{LYRMessageOptionsPushNotificationAlertKey : [NSString stringWithFormat:@"%@ %@", [PFUser currentUser].firstName, pushText],
+                                      LYRMessageOptionsPushNotificationSoundNameKey :@"default.aif"};
+        LYRMessage *message = [self.layerClient newMessageWithParts:messageParts options:pushOptions error:nil];
+        
+        if (message){
+            [messages addObject:message];
+        }
+    }
+    return messages;
 }
 
 #pragma mark - ATLAddressBarViewController Delegate methods methods

@@ -28,5 +28,6 @@
 
 @property (nonatomic) LYRClient *layerClient;
 @property (nonatomic) PFLogInViewController *logInViewController;
+@property (nonatomic) ConversationListViewController *conversationListViewController;
 
 @end

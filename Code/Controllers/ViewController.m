@@ -253,8 +253,9 @@
 {
     [SVProgressHUD dismiss];
     
-    ConversationListViewController *controller = [ConversationListViewController  conversationListViewControllerWithLayerClient:self.layerClient];
-    [self.navigationController pushViewController:controller animated:YES];
+    self.conversationListViewController = [ConversationListViewController  conversationListViewControllerWithLayerClient:self.layerClient];
+    self.conversationListViewController.displaysAvatarItem = YES;
+    [self.navigationController pushViewController:self.conversationListViewController animated:YES];
 }
 
 @end

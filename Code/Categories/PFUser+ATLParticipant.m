@@ -52,4 +52,9 @@
     return [[NSString stringWithFormat:@"%@%@", [self.firstName substringToIndex:1], [self.lastName substringToIndex:1]] uppercaseString];
 }
 
+- (NSURL *)avatarImageURL
+{
+    return [NSURL URLWithString:@"http://lorempixel.com/400/200/"];
+}
+
 @end
