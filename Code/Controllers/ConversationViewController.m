@@ -45,32 +45,8 @@
     self.dateFormatter = [[NSDateFormatter alloc] init];
     self.dateFormatter.dateStyle = NSDateFormatterShortStyle;
     self.dateFormatter.timeStyle = NSDateFormatterShortStyle;
-
-    if (self.conversation) {
-        [self addDetailsButton];
-    }
     
     [self configureUI];
-}
-
-#pragma mark - Details Button Actions
-
-- (void)addDetailsButton
-{
-    if (self.navigationItem.rightBarButtonItem) return;
-    
-    UIBarButtonItem *detailsButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Details"
-                                                                          style:UIBarButtonItemStylePlain
-                                                                         target:self
-                                                                         action:@selector(detailsButtonTapped)];
-    self.navigationItem.rightBarButtonItem = detailsButtonItem;
-}
-
-- (void)detailsButtonTapped
-{
-    ConversationDetailViewController *detailViewController = [ConversationDetailViewController conversationDetailViewControllerWithConversation:self.conversation];
-    detailViewController.layerClient = self.layerClient;
-    [self.navigationController pushViewController:detailViewController animated:YES];
 }
 
 #pragma mark - UI Configuration methods

@@ -22,7 +22,6 @@
 #import <Atlas/Atlas.h>
 #import <Parse/Parse.h>
 #import "PFUser+ATLParticipant.h"
-#import "ConversationDetailViewController.h"
 
 @interface ConversationViewController : ATLConversationViewController
 
