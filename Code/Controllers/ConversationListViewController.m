@@ -137,7 +137,7 @@
 
 #pragma mark - Conversation Selection
 
-// The following method handles presenting the correct `ATLMConversationViewController`, regardeless of the current state of the navigation stack.
+// The following method handles presenting the correct `ConversationViewController`, regardeless of the current state of the navigation stack.
 - (void)presentControllerWithConversation:(LYRConversation *)conversation
 {
     ConversationViewController *controller = [ConversationViewController conversationViewControllerWithLayerClient:self.layerClient];

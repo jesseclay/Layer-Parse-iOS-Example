@@ -32,9 +32,9 @@
 
 #pragma mark TODO: Before first launch, update LayerAppIDString, ParseAppIDString or ParseClientKeyString values
 #warning "TODO:If LayerAppIDString, ParseAppIDString or ParseClientKeyString are nil, this app will crash"
-static NSString *const LayerAppIDString = @"44a270b6-7c58-11e4-bbba-fcf307000352";
-static NSString *const ParseAppIDString = @"hQvFXx927IAtRepgc8qL9riePQozaYgGXzSpxyNd";
-static NSString *const ParseClientKeyString = @"hHnDw8qFmZuDtvasWrbo3id2RUya4q5nHbgnF2fA";
+static NSString *const LayerAppIDString = nil;
+static NSString *const ParseAppIDString = nil;
+static NSString *const ParseClientKeyString = nil;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -116,40 +116,43 @@ static NSString *const ParseClientKeyString = @"hHnDw8qFmZuDtvasWrbo3id2RUya4q5n
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
-    if ([userInfo objectForKey:@"layer"] != nil)
-    {
-        BOOL userTappedRemoteNotification = application.applicationState == UIApplicationStateInactive;
-        __block LYRConversation *conversation = [self conversationFromRemoteNotification:userInfo];
-        if (userTappedRemoteNotification && conversation) {
-            [self navigateToViewForConversation:conversation];
-        } else if (userTappedRemoteNotification) {
-            [SVProgressHUD showWithStatus:@"Loading Conversation" maskType:SVProgressHUDMaskTypeBlack];
-        }
-        
-        BOOL success = [self.layerClient synchronizeWithRemoteNotification:userInfo completion:^(NSArray *changes, NSError *error) {
-            if (changes.count) {
-                completionHandler(UIBackgroundFetchResultNewData);
-            } else {
-                completionHandler(error ? UIBackgroundFetchResultFailed : UIBackgroundFetchResultNoData);
+    if (application.applicationState == UIApplicationStateInactive || application.applicationState == UIApplicationStateBackground) {
+        if ([userInfo objectForKey:@"layer"] != nil)
+        {
+            BOOL userTappedRemoteNotification = application.applicationState == UIApplicationStateInactive;
+            __block LYRConversation *conversation = [self conversationFromRemoteNotification:userInfo];
+            if (userTappedRemoteNotification && conversation) {
+                [self navigateToViewForConversation:conversation];
+            } else if (userTappedRemoteNotification) {
+                [SVProgressHUD showWithStatus:@"Loading Conversation" maskType:SVProgressHUDMaskTypeBlack];
             }
             
-            // Try navigating once the synchronization completed
-            if (userTappedRemoteNotification && !conversation) {
-                [SVProgressHUD dismiss];
-                conversation = [self conversationFromRemoteNotification:userInfo];
-                [self navigateToViewForConversation:conversation];
+            BOOL success = [self.layerClient synchronizeWithRemoteNotification:userInfo completion:^(NSArray *changes, NSError *error) {
+                if (changes.count) {
+                    completionHandler(UIBackgroundFetchResultNewData);
+                } else {
+                    completionHandler(error ? UIBackgroundFetchResultFailed : UIBackgroundFetchResultNoData);
+                }
+                
+                // Try navigating once the synchronization completed
+                if (userTappedRemoteNotification && !conversation) {
+                    [SVProgressHUD dismiss];
+                    conversation = [self conversationFromRemoteNotification:userInfo];
+                    [self navigateToViewForConversation:conversation];
+                }
+            }];
+            
+            if (!success) {
+                completionHandler(UIBackgroundFetchResultNoData);
             }
-        }];
-        
-        if (!success) {
-            completionHandler(UIBackgroundFetchResultNoData);
         }
-    }
-    else
-    {        
-        NSLog(@"userInfo: %@",userInfo);
-        [PFPush handlePush:userInfo];
-        completionHandler(UIBackgroundFetchResultNewData);
+        else
+        {
+            NSLog(@"userInfo: %@",userInfo);
+            [PFPush handlePush:userInfo];
+            completionHandler(UIBackgroundFetchResultNewData);
+        }
+        
     }
 }
 
