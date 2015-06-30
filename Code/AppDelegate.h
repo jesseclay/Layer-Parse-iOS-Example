@@ -26,7 +26,5 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-@property (nonatomic) LYRClient *layerClient;
-@property (nonatomic) ViewController *controller;
 
 @end

@@ -54,7 +54,7 @@
 
 - (NSURL *)avatarImageURL
 {
-    return [NSURL URLWithString:@"http://lorempixel.com/400/200/"];
+    return nil;
 }
 
 @end

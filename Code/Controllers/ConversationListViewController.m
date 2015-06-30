@@ -79,7 +79,19 @@
 
 - (id<ATLAvatarItem>)conversationListViewController:(ATLConversationListViewController *)conversationListViewController avatarItemForConversation:(LYRConversation *)conversation
 {
-    return [PFUser new];
+    NSString *userID = conversation.lastMessage.sender.userID;
+    if ([userID isEqualToString:[PFUser currentUser].objectId]) return [PFUser currentUser];
+    PFUser *user = [[UserManager sharedManager] cachedUserForUserID:userID];
+    if (!user) {
+        [[UserManager sharedManager] queryAndCacheUsersWithIDs:@[userID] completion:^(NSArray *participants, NSError *error) {
+            if (participants && error == nil) {
+                [self reloadCellForConversation:conversation];
+            } else {
+                NSLog(@"Error querying for users: %@", error);
+            }
+        }];
+    }
+    return user;
 }
 
 #pragma mark - ATLConversationListViewControllerDataSource Methods
@@ -147,8 +159,6 @@
 
 - (void)logoutButtonTapped:(id)sender
 {
-    NSLog(@"logOutButtonTapAction");
-    
     [self.layerClient deauthenticateWithCompletion:^(BOOL success, NSError *error) {
         if (!error) {
             [PFUser logOut];

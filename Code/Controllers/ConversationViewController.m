@@ -44,8 +44,7 @@
     // Setup the dateformatter used by the dataSource.
     self.dateFormatter = [[NSDateFormatter alloc] init];
     self.dateFormatter.dateStyle = NSDateFormatterShortStyle;
-    self.dateFormatter.timeStyle = NSDateFormatterShortStyle;
-    
+    self.dateFormatter.timeStyle = NSDateFormatterShortStyle;    
     [self configureUI];
 }
 

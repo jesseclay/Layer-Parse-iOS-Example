@@ -21,13 +21,20 @@
 #import <Parse/Parse.h>
 #import "AppDelegate.h"
 
+@interface AppDelegate () <UIApplicationDelegate>
+
+@property (nonatomic) LYRClient *layerClient;
+@property (nonatomic) ViewController *controller;
+
+@end
+
 @implementation AppDelegate
 
 #pragma mark TODO: Before first launch, update LayerAppIDString, ParseAppIDString or ParseClientKeyString values
 #warning "TODO:If LayerAppIDString, ParseAppIDString or ParseClientKeyString are nil, this app will crash"
-static NSString *const LayerAppIDString = nil;
-static NSString *const ParseAppIDString = nil;
-static NSString *const ParseClientKeyString = nil;
+static NSString *const LayerAppIDString = @"44a270b6-7c58-11e4-bbba-fcf307000352";
+static NSString *const ParseAppIDString = @"hQvFXx927IAtRepgc8qL9riePQozaYgGXzSpxyNd";
+static NSString *const ParseClientKeyString = @"hHnDw8qFmZuDtvasWrbo3id2RUya4q5nHbgnF2fA";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -92,7 +99,6 @@ static NSString *const ParseClientKeyString = nil;
     // Store the deviceToken in the current installation and save it to Parse.
     PFInstallation *currentInstallation = [PFInstallation currentInstallation];
     [currentInstallation setDeviceTokenFromData:deviceToken];
-    currentInstallation.channels = @[ @"global" ];
     [currentInstallation saveInBackground];
     
     // Send device token to Layer so Layer can send pushes to this device.
@@ -155,12 +161,7 @@ static NSString *const ParseClientKeyString = nil;
 
 - (void)navigateToViewForConversation:(LYRConversation *)conversation
 {
-    if (![NSThread isMainThread]) {
-        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Attempted to navigate UI from non-main thread" userInfo:nil];
-    }
-    
-    if(self.controller.conversationListViewController != nil )
-    {
+    if(self.controller.conversationListViewController != nil ) {
         [self.controller.conversationListViewController selectConversation:conversation];
     }
 }
