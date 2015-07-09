@@ -31,9 +31,9 @@
 
 @implementation ViewController
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
+    [super viewWillAppear:animated];
     
     if (![PFUser currentUser]) { // No user logged in
         // Create the log in view controller
@@ -61,7 +61,14 @@
         UIImageView *signupImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LayerParseLogin"]];
         signupImageView.contentMode = UIViewContentModeScaleAspectFit;
         signUpViewController.signUpView.logo = signupImageView;
-        
+    }
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+
+    if (![PFUser currentUser]) { // No user logged in    
         [self presentViewController:self.logInViewController animated:YES completion:nil];
     }
     else{
